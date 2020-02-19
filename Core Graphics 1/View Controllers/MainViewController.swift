@@ -17,14 +17,10 @@ class MainViewController: UIViewController {
     
     // MARK: Properties
     
-    var canvasWidth: CGFloat = 0
-    var canvasHeight: CGFloat = 0
-    var cellSize: CGFloat = 0
-    var lastScale: CGFloat = 1
     
     // MARK: Views
     
-    weak var canvasView: UIView!
+    weak var mainImageView: UIView!
     
     // MARK: Style Guide
     
@@ -48,25 +44,12 @@ class MainViewController: UIViewController {
     // MARK: Actions
     
     @objc private func canvasPinchGesturePinched(_ pinch: UIPinchGestureRecognizer) {
-        print(lastScale * pinch.scale)
-        canvasView.transform = CGAffineTransform(scaleX: lastScale * pinch.scale, y: lastScale * pinch.scale)
-//        lastScale = pinch.scale
-//        print("State: \(pinch.state.rawValue)")
-        if (pinch.state == .ended) {
-            lastScale = pinch.scale
-        }
     }
     
     // MARK: Helpers
     
     private func setProperties() {
-        let viewWidth: CGFloat = self.view.bounds.width
-        cellSize = floor(viewWidth / CGFloat(columns))
-        if cellSize < 1 {
-            cellSize = 1
-        }
-        canvasWidth = cellSize * CGFloat(columns)
-        canvasHeight = cellSize * CGFloat(rows)
+
     }
     
     // MARK: Setup Views
@@ -92,65 +75,62 @@ class MainViewController: UIViewController {
 //            canvasView.widthAnchor.constraint(equalToConstant: canvasWidth)
 //        ])
 //        self.canvasView = canvasView
-        guard let image = processPixels(in: UIImage(named: "Bookmark")!) else {return}
+        guard let image = createImage() else {return}
         print("Image: \(image)")
         
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .red
-        self.view.addSubview(imageView)
+        // Main Image View
+        let mainImageView = UIImageView(image: image)
+        mainImageView.contentMode = .scaleAspectFit
+        mainImageView.layer.magnificationFilter = .nearest
+        mainImageView.translatesAutoresizingMaskIntoConstraints = false
+        mainImageView.backgroundColor = .clear
+        self.view.addSubview(mainImageView)
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            imageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 250)
+            mainImageView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            mainImageView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            mainImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            mainImageView.heightAnchor.constraint(equalToConstant: 250)
         ])
     }
     
-    
-    
-    func processPixels(in image: UIImage) -> UIImage? {
-        guard let inputCGImage = image.cgImage else {
-            print("unable to get cgImage")
-            return nil
-        }
+    func createImage() -> UIImage? {
         let colorSpace       = CGColorSpaceCreateDeviceRGB()
-        let width            = inputCGImage.width
-        let height           = inputCGImage.height
+        let width            = 100
+        let height           = 100
         let bytesPerPixel    = 4
         let bitsPerComponent = 8
         let bytesPerRow      = bytesPerPixel * width
         let bitmapInfo       = RGBA32.bitmapInfo
-
+        
         guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: bitsPerComponent, bytesPerRow: bytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo) else {
             print("unable to create context")
             return nil
         }
-        context.draw(inputCGImage, in: CGRect(x: 0, y: 0, width: width, height: height))
-
+        
         guard let buffer = context.data else {
-            print("unable to get context data")
+            print("Unable To Get Context Data")
             return nil
         }
-
+        
         let pixelBuffer = buffer.bindMemory(to: RGBA32.self, capacity: width * height)
-
+        
         for row in 0 ..< Int(height) {
             for column in 0 ..< Int(width) {
                 let offset = row * width + column
-                if Int.random(in: 0...6) == 0 {
-                    pixelBuffer[offset] = .green
+                if Int.random(in: 0...3) == 0 {
+                    pixelBuffer[offset] = .blue
+                } else {
+                    pixelBuffer[offset] = .cyan
                 }
             }
         }
 
         let outputCGImage = context.makeImage()!
-        let outputImage = UIImage(cgImage: outputCGImage, scale: image.scale, orientation: image.imageOrientation)
-
+        let outputImage = UIImage(cgImage: outputCGImage, scale: 1, orientation: UIImage.Orientation.up)
         return outputImage
     }
-
+    
+    
     struct RGBA32: Equatable {
         private var color: UInt32
 
