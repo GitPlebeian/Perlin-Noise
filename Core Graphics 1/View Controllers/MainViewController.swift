@@ -7,16 +7,18 @@
 //
 
 import UIKit
+import Photos
 
 class MainViewController: UIViewController {
     
     // MARK: Generation Variables
     
-    let columns: Int = 600
-    let rows: Int = 600
+    let height: Int = 1080
+    let width: Int = 1920
     
     // MARK: Properties
     
+    var image: UIImage?
     
     // MARK: Views
     
@@ -44,6 +46,7 @@ class MainViewController: UIViewController {
     // MARK: Actions
     
     @objc private func canvasPinchGesturePinched(_ pinch: UIPinchGestureRecognizer) {
+//        PHPhoto
     }
     
     // MARK: Helpers
@@ -59,24 +62,8 @@ class MainViewController: UIViewController {
         
         self.view.backgroundColor = .white
         
-        // Canvas View
-//        let canvasView = CanvasView()
-//        canvasView.setCellSize(cellSize: cellSize)
-//        canvasView.setColsAndRows(cols: columns, rows: rows)
-//        let canvasPinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(canvasPinchGesturePinched))
-//        canvasView.addGestureRecognizer(canvasPinchGesture)
-//        canvasView.backgroundColor = .black
-//        canvasView.translatesAutoresizingMaskIntoConstraints = false
-//        self.view.addSubview(canvasView)
-//        NSLayoutConstraint.activate([
-//            canvasView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-//            canvasView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-//            canvasView.heightAnchor.constraint(equalToConstant: canvasHeight),
-//            canvasView.widthAnchor.constraint(equalToConstant: canvasWidth)
-//        ])
-//        self.canvasView = canvasView
         guard let image = createImage() else {return}
-        print("Image: \(image)")
+        self.image = image
         
         // Main Image View
         let mainImageView = UIImageView(image: image)
@@ -91,12 +78,14 @@ class MainViewController: UIViewController {
             mainImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
             mainImageView.heightAnchor.constraint(equalToConstant: 250)
         ])
+        
+        requestAuthorization()
     }
     
     func createImage() -> UIImage? {
         let colorSpace       = CGColorSpaceCreateDeviceRGB()
-        let width            = 100
-        let height           = 100
+        let width            = self.width
+        let height           = self.height
         let bytesPerPixel    = 4
         let bitsPerComponent = 8
         let bytesPerRow      = bytesPerPixel * width
@@ -124,9 +113,11 @@ class MainViewController: UIViewController {
                 }
             }
         }
-
+        context.interpolationQuality = .none
         let outputCGImage = context.makeImage()!
+        
         let outputImage = UIImage(cgImage: outputCGImage, scale: 1, orientation: UIImage.Orientation.up)
+        
         return outputImage
     }
     
@@ -175,6 +166,60 @@ class MainViewController: UIViewController {
     }
 }
 
-extension MainViewController: UIGestureRecognizerDelegate {
+extension MainViewController {
     
+    func saveImage() {
+        PHPhotoLibrary.shared().performChanges({
+            guard let image = self.image else {return}
+            let creationRequest = PHAssetCreationRequest.forAsset()
+            guard let imageData = image.pngData() else {
+                print("Unable to create image data")
+                return
+            }
+            
+            creationRequest.addResource(with: .photo, data: imageData, options: nil)
+        }) { (success, error) in
+            print("Success: \(success)")
+            if let error = error {
+                print("Error Saving: \(error.localizedDescription)")
+                return
+            }
+        }
+    }
+    
+    fileprivate func requestAuthorization() {
+        PHPhotoLibrary.requestAuthorization { (status) in
+            DispatchQueue.main.async {
+                switch status {
+                case .authorized:
+                    self.saveImage()
+                case .notDetermined:
+                    if status == PHAuthorizationStatus.authorized {
+                        self.saveImage()
+                    }
+                case .restricted:
+                    let alert = UIAlertController(title: "Photo Library Restricted", message: "Photo Library access is restricted and cannot be accessed", preferredStyle: .alert)
+                    let okay = UIAlertAction(title: "Ok", style: .default)
+                    alert.addAction(okay)
+                    self.present(alert, animated: true)
+                case .denied:
+                    let alert = UIAlertController(title: "Photo Library Denied", message: "Photo Library access was previously denied.  Please update your Settings.", preferredStyle: .alert)
+                    let settings = UIAlertAction(title: "Settings", style: .default) { (action) in
+                        DispatchQueue.main.async {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url, options: [:])
+                            }
+                        }
+                    }
+                    let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+                    alert.addAction(settings)
+                    alert.addAction(cancel)
+                    self.present(alert, animated: true)
+                @unknown default:
+                    print("Unknown switch at \(#function)")
+                }
+            }
+        }
+    }
 }
+
