@@ -13,15 +13,16 @@ class MainViewController: UIViewController {
     
     // MARK: Generation Variables
     
-    let height: Int = 100
-    let width: Int = 100
+    let height: Int = 1080
+    let width: Int = 1920
     
     // MARK: Properties
-    
+
     var image: UIImage?
     
     // MARK: Views
     
+    weak var imageScrollView: UIScrollView!
     weak var mainImageView: UIView!
     
     // MARK: Style Guide
@@ -65,21 +66,39 @@ class MainViewController: UIViewController {
         guard let image = createImage() else {return}
         self.image = image
         
+        // Image Scroll View
+        let imageScrollView = UIScrollView()
+        imageScrollView.backgroundColor = .black
+        imageScrollView.alwaysBounceVertical = true
+        imageScrollView.alwaysBounceHorizontal = true
+        imageScrollView.maximumZoomScale = 30
+        imageScrollView.delegate = self
+        imageScrollView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(imageScrollView)
+        NSLayoutConstraint.activate([
+            imageScrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            imageScrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            imageScrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            imageScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+        self.imageScrollView = imageScrollView
+        
         // Main Image View
         let mainImageView = UIImageView(image: image)
         mainImageView.contentMode = .scaleAspectFit
         mainImageView.layer.magnificationFilter = .nearest
         mainImageView.translatesAutoresizingMaskIntoConstraints = false
         mainImageView.backgroundColor = .clear
-        self.view.addSubview(mainImageView)
+        imageScrollView.addSubview(mainImageView)
         NSLayoutConstraint.activate([
-            mainImageView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            mainImageView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            mainImageView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            mainImageView.heightAnchor.constraint(equalToConstant: 250)
+            mainImageView.leadingAnchor.constraint(equalTo: imageScrollView.leadingAnchor),
+            mainImageView.trailingAnchor.constraint(equalTo: imageScrollView.trailingAnchor),
+            mainImageView.topAnchor.constraint(equalTo: imageScrollView.topAnchor),
+            mainImageView.bottomAnchor.constraint(equalTo: imageScrollView.bottomAnchor),
+            mainImageView.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1),
+            mainImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1)
         ])
-        
-        requestAuthorization()
+        self.mainImageView = mainImageView
     }
     
     func createImage() -> UIImage? {
@@ -163,6 +182,12 @@ class MainViewController: UIViewController {
         static func ==(lhs: RGBA32, rhs: RGBA32) -> Bool {
             return lhs.color == rhs.color
         }
+    }
+}
+
+extension MainViewController: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        self.mainImageView
     }
 }
 
