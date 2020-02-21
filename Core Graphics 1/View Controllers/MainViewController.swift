@@ -13,8 +13,8 @@ class MainViewController: UIViewController {
     
     // MARK: Generation Variables
     
-    let height: Int = 1080
-    let width: Int = 1920
+    let height: Int = 100
+    let width: Int = 100
     
     // MARK: Properties
     
