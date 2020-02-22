@@ -8,22 +8,28 @@
 
 import UIKit
 import Photos
+import GameKit
 
 class MainViewController: UIViewController {
     
     // MARK: Generation Variables
     
-    let height: Int = 1080
-    let width: Int = 1920
+    let height: Int = 300
+    let width: Int = 300
     
     // MARK: Properties
 
     var image: UIImage?
+    var map: [[Float]] = []
+    
+    // Noise
+    var noiseMap: GKNoiseMap!
     
     // MARK: Views
     
     weak var imageScrollView: UIScrollView!
-    weak var mainImageView: UIView!
+    weak var mainImageView: UIImageView!
+    weak var actionButton: UIButton!
     
     // MARK: Style Guide
     
@@ -46,14 +52,43 @@ class MainViewController: UIViewController {
     
     // MARK: Actions
     
-    @objc private func canvasPinchGesturePinched(_ pinch: UIPinchGestureRecognizer) {
-//        PHPhoto
+    @objc private func actionButtonTapped() {
+        updateImage()
     }
     
     // MARK: Helpers
     
     private func setProperties() {
 
+    }
+    
+    func getColorForXY(x: Int, y: Int) -> RGBA32 {
+        let randomInt = UInt8.random(in: 0...255)
+        
+//        let randomRed   = UInt8.random(in: 0...255)
+//        let randomGreen = UInt8.random(in: 0...255)
+//        let randomBlue  = UInt8.random(in: 0...255)
+        
+        let randomColor = RGBA32(red: randomInt, green: randomInt, blue: randomInt, alpha: 1)
+        return randomColor
+    }
+    
+    func getColorForFloat(number: Float) -> RGBA32 {
+//        print("\(number) : \((number + 1) * (255 / 2))")
+        let scalledNumber = UInt8((number + 1) * (255 / 2))
+//        print(scalledNumber)
+        let color = RGBA32(red: scalledNumber, green: scalledNumber, blue: scalledNumber, alpha: 1)
+        return color
+    }
+    
+    private func noise(x: Int, y: Int) {
+        
+    }
+    
+    private func updateImage() {
+        guard let image = createImage() else {return}
+        self.image = image
+        mainImageView.image = image
     }
     
     // MARK: Setup Views
@@ -99,9 +134,41 @@ class MainViewController: UIViewController {
             mainImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1)
         ])
         self.mainImageView = mainImageView
+        
+        // Refresh Button
+        let actionButton = UIButton()
+        actionButton.backgroundColor = .white
+        actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+        actionButton.setTitle("Action", for: .normal)
+        actionButton.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(actionButton)
+        NSLayoutConstraint.activate([
+            actionButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            actionButton.heightAnchor.constraint(equalToConstant: 60),
+            actionButton.widthAnchor.constraint(equalToConstant: 60),
+            actionButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -32)
+        ])
+        self.actionButton = actionButton
     }
     
     func createImage() -> UIImage? {
+        
+//        let tileThing = SKTileMapNode(
+        let noiseSource = GKPerlinNoiseSource()
+//        noiseSource.
+//        noiseSource.seed = Int32.random(in: 0...Int32.max)
+        noiseSource.seed = 1
+//        noiseSource.frequency = 3
+//        noiseSource.octaveCount = 1
+//        noiseSource.lacunarity = 4
+        let noise = GKNoise(noiseSource)
+//        noise.applyTurbulence(frequency: 1000, power: 10000, roughness: 2, seed: 8)
+        noiseMap = GKNoiseMap(noise)
+//        print("\nSize: \(noiseMap.size)")
+//        print("Origin: \(noiseMap.origin)")
+//        print("Sample Count: \(noiseMap.sampleCount)")
+        noiseMap = GKNoiseMap(noise, size: SIMD2(arrayLiteral: 1, 1), origin: SIMD2(arrayLiteral: 4, 4), sampleCount: SIMD2(arrayLiteral: 300, 300), seamless: true)
+        
         let colorSpace       = CGColorSpaceCreateDeviceRGB()
         let width            = self.width
         let height           = self.height
@@ -123,13 +190,16 @@ class MainViewController: UIViewController {
         let pixelBuffer = buffer.bindMemory(to: RGBA32.self, capacity: width * height)
         
         for row in 0 ..< Int(height) {
+            if map.count == row {
+                map.append([])
+            }
             for column in 0 ..< Int(width) {
                 let offset = row * width + column
-                if Int.random(in: 0...3) == 0 {
-                    pixelBuffer[offset] = .blue
-                } else {
-                    pixelBuffer[offset] = .cyan
-                }
+//                pixelBuffer[offset] = getColorForXY(x: column, y: row)
+                let pointCordinated: SIMD2<Int32> = SIMD2(arrayLiteral: Int32(column), Int32(row))
+                pixelBuffer[offset] = getColorForFloat(number: noiseMap.value(at: pointCordinated))
+//                map[row].append(noiseMap.value(at: pointCordinated))
+//                print("\(map[row])")
             }
         }
         context.interpolationQuality = .none
