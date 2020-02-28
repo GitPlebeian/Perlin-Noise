@@ -11,7 +11,15 @@
 		860B178423F3A4E500A5FA2D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860B178323F3A4E500A5FA2D /* MainViewController.swift */; };
 		860B178923F3A4E500A5FA2D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 860B178823F3A4E500A5FA2D /* Assets.xcassets */; };
 		860B178C23F3A4E500A5FA2D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 860B178A23F3A4E500A5FA2D /* LaunchScreen.storyboard */; };
-		860B179423F3A5E600A5FA2D /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860B179323F3A5E600A5FA2D /* CanvasView.swift */; };
+		866A162E24095C4A00448243 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A162D24095C4A00448243 /* MainNavigationController.swift */; };
+		866A16342409661700448243 /* ParameterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A16332409661700448243 /* ParameterTableViewCell.swift */; };
+		866A163824096B1400448243 /* 8bitOperatorPlus8-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 866A163724096B1400448243 /* 8bitOperatorPlus8-Regular.ttf */; };
+		866A163E2409700900448243 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A163D2409700900448243 /* Parameter.swift */; };
+		866A16402409702400448243 /* ParameterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A163F2409702400448243 /* ParameterController.swift */; };
+		8698456024020106003E4D8E /* ParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8698455F24020106003E4D8E /* ParametersViewController.swift */; };
+		86E595B42404B9AD00231D53 /* 8BitBoldFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86E595B32404B9AD00231D53 /* 8BitBoldFont.ttf */; };
+		86E595B72404BCC700231D53 /* StyleGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E595B62404BCC700231D53 /* StyleGuide.swift */; };
+		86E595BB2404BE5C00231D53 /* UIColor Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E595BA2404BE5C00231D53 /* UIColor Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,7 +29,15 @@
 		860B178823F3A4E500A5FA2D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		860B178B23F3A4E500A5FA2D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		860B178D23F3A4E500A5FA2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		860B179323F3A5E600A5FA2D /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		866A162D24095C4A00448243 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
+		866A16332409661700448243 /* ParameterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterTableViewCell.swift; sourceTree = "<group>"; };
+		866A163724096B1400448243 /* 8bitOperatorPlus8-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "8bitOperatorPlus8-Regular.ttf"; sourceTree = "<group>"; };
+		866A163D2409700900448243 /* Parameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameter.swift; sourceTree = "<group>"; };
+		866A163F2409702400448243 /* ParameterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterController.swift; sourceTree = "<group>"; };
+		8698455F24020106003E4D8E /* ParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersViewController.swift; sourceTree = "<group>"; };
+		86E595B32404B9AD00231D53 /* 8BitBoldFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 8BitBoldFont.ttf; sourceTree = "<group>"; };
+		86E595B62404BCC700231D53 /* StyleGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleGuide.swift; sourceTree = "<group>"; };
+		86E595BA2404BE5C00231D53 /* UIColor Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +72,10 @@
 			children = (
 				8620D18323F647D8006DFC52 /* Storyboards */,
 				8620D18223F647C4006DFC52 /* View Controllers */,
+				866A163B24096FBA00448243 /* Controllers */,
+				866A163C24096FC500448243 /* Models */,
+				86E595B52404BCBA00231D53 /* Other */,
+				86E595B92404BE4800231D53 /* Extensions */,
 				8620D18423F647FD006DFC52 /* Resources */,
 			);
 			path = "Core Graphics 1";
@@ -64,8 +84,9 @@
 		8620D18223F647C4006DFC52 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				860B179323F3A5E600A5FA2D /* CanvasView.swift */,
+				866A162D24095C4A00448243 /* MainNavigationController.swift */,
 				860B178323F3A4E500A5FA2D /* MainViewController.swift */,
+				866A1631240965F500448243 /* Settings */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -81,11 +102,70 @@
 		8620D18423F647FD006DFC52 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				86E595B22404B99000231D53 /* Custom Fonts */,
 				860B177F23F3A4E500A5FA2D /* AppDelegate.swift */,
 				860B178823F3A4E500A5FA2D /* Assets.xcassets */,
 				860B178D23F3A4E500A5FA2D /* Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		866A1631240965F500448243 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				866A16322409660000448243 /* Cells */,
+				8698455F24020106003E4D8E /* ParametersViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		866A16322409660000448243 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				866A16332409661700448243 /* ParameterTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		866A163B24096FBA00448243 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				866A163F2409702400448243 /* ParameterController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		866A163C24096FC500448243 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				866A163D2409700900448243 /* Parameter.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		86E595B22404B99000231D53 /* Custom Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				866A163724096B1400448243 /* 8bitOperatorPlus8-Regular.ttf */,
+				86E595B32404B9AD00231D53 /* 8BitBoldFont.ttf */,
+			);
+			path = "Custom Fonts";
+			sourceTree = "<group>";
+		};
+		86E595B52404BCBA00231D53 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				86E595B62404BCC700231D53 /* StyleGuide.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		86E595B92404BE4800231D53 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				86E595BA2404BE5C00231D53 /* UIColor Extension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +228,8 @@
 			files = (
 				860B178C23F3A4E500A5FA2D /* LaunchScreen.storyboard in Resources */,
 				860B178923F3A4E500A5FA2D /* Assets.xcassets in Resources */,
+				866A163824096B1400448243 /* 8bitOperatorPlus8-Regular.ttf in Resources */,
+				86E595B42404B9AD00231D53 /* 8BitBoldFont.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,9 +240,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				866A162E24095C4A00448243 /* MainNavigationController.swift in Sources */,
 				860B178423F3A4E500A5FA2D /* MainViewController.swift in Sources */,
+				8698456024020106003E4D8E /* ParametersViewController.swift in Sources */,
+				866A16402409702400448243 /* ParameterController.swift in Sources */,
+				86E595BB2404BE5C00231D53 /* UIColor Extension.swift in Sources */,
+				86E595B72404BCC700231D53 /* StyleGuide.swift in Sources */,
+				866A16342409661700448243 /* ParameterTableViewCell.swift in Sources */,
 				860B178023F3A4E500A5FA2D /* AppDelegate.swift in Sources */,
-				860B179423F3A5E600A5FA2D /* CanvasView.swift in Sources */,
+				866A163E2409700900448243 /* Parameter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,6 +387,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
 				INFOPLIST_FILE = "Core Graphics 1/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -317,6 +406,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2WP5X762NJ;
 				INFOPLIST_FILE = "Core Graphics 1/Resources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

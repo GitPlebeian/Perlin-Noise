@@ -14,8 +14,8 @@ class MainViewController: UIViewController {
     
     // MARK: Generation Variables
     
-    let height: Int = 300
-    let width: Int = 300
+    let height: Int = 200
+    let width: Int =  200
     
     // MARK: Properties
 
@@ -27,11 +27,21 @@ class MainViewController: UIViewController {
     
     // MARK: Views
     
-    weak var imageScrollView: UIScrollView!
-    weak var mainImageView: UIImageView!
-    weak var actionButton: UIButton!
+    weak var imageScrollView:      UIScrollView!
+    weak var mainImageView:        UIImageView!
+    
+    weak var actionButton:         UIButton!
+    weak var settingsButton:       UIButton!
     
     // MARK: Style Guide
+    
+    let parametersLeadingTrailingMargin: CGFloat = 8
+    let parametersHeight:                CGFloat = 50
+    let parametersSpacing:               CGFloat = 8
+    
+    // Generate Button
+    var generateButtonAttributedStringForNormal:      NSAttributedString!
+    var generateButtonAttributedStringForHighlighted: NSAttributedString!
     
     // MARK: Object Lifecycle
     
@@ -45,65 +55,128 @@ class MainViewController: UIViewController {
     
     // MARK: View Lifecycle
     
+    // View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
     }
     
+    // View Will Appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    // MARK: Other Overrides
+    
+    // Status Bar
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+    
     // MARK: Actions
     
+    // Action Button Tapped
     @objc private func actionButtonTapped() {
-        updateImage()
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.updateImage()
+        }
+    }
+    
+    // Settings Button Tapped
+    @objc private func settingButtonTapped() {
+        let parametersViewController = ParametersViewController()
+        navigationController?.pushViewController(parametersViewController, animated: true)
     }
     
     // MARK: Helpers
     
-    private func setProperties() {
-
-    }
-    
-    func getColorForXY(x: Int, y: Int) -> RGBA32 {
-        let randomInt = UInt8.random(in: 0...255)
-        
-//        let randomRed   = UInt8.random(in: 0...255)
-//        let randomGreen = UInt8.random(in: 0...255)
-//        let randomBlue  = UInt8.random(in: 0...255)
-        
-        let randomColor = RGBA32(red: randomInt, green: randomInt, blue: randomInt, alpha: 1)
-        return randomColor
-    }
-    
     func getColorForFloat(number: Float) -> RGBA32 {
-//        print("\(number) : \((number + 1) * (255 / 2))")
-        let scalledNumber = UInt8((number + 1) * (255 / 2))
-//        print(scalledNumber)
-        let color = RGBA32(red: scalledNumber, green: scalledNumber, blue: scalledNumber, alpha: 1)
-        return color
-    }
-    
-    private func noise(x: Int, y: Int) {
-        
+        if number < 0 {
+            return .water
+        } else if number < 0.25 {
+            return .sand
+        } else {
+            return .grass
+        }
     }
     
     private func updateImage() {
         guard let image = createImage() else {return}
         self.image = image
-        mainImageView.image = image
+        DispatchQueue.main.async {
+            self.mainImageView.image = image
+        }
+    }
+    
+    // MARK: Set Style Guide Variables
+    
+    private func setStyleGuideVariables() {
+        // Generate Button
+        generateButtonAttributedStringForNormal = NSAttributedString(string: "Generate", attributes: [
+            NSAttributedString.Key.font: UIFont(name: StyleGuide.boldPixelFontName, size: StyleGuide.buttonPixelFontSize)!,
+            NSAttributedString.Key.foregroundColor: UIColor.white
+        ])
+        generateButtonAttributedStringForHighlighted = NSAttributedString(string: "Generate", attributes: [
+            NSAttributedString.Key.font: UIFont(name: StyleGuide.boldPixelFontName, size: StyleGuide.buttonPixelFontSize)!,
+            NSAttributedString.Key.foregroundColor: UIColor.whiteTextHighlighted
+        ])
+    }
+    
+    // MARK: Set Data
+    
+    private func setData() {
+        guard let image = createImage() else {return}
+        self.image = image
     }
     
     // MARK: Setup Views
     
     private func setupViews() {
-        setProperties()
+        setData()
+        setStyleGuideVariables()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .backgroundColor
         
-        guard let image = createImage() else {return}
-        self.image = image
+        // Settings Button
+        let settingsButton = UIButton()
+        settingsButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
+        settingsButton.setImage(UIImage(named: "White Gear"), for: .normal)
+        settingsButton.backgroundColor = .tintColor
+        settingsButton.contentMode = .scaleAspectFit
+        settingsButton.tintColor = .white
+        settingsButton.layer.cornerRadius = StyleGuide.lightCornerRadius
+        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(settingsButton)
+        NSLayoutConstraint.activate([
+            settingsButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -4),
+            settingsButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -4),
+            settingsButton.heightAnchor.constraint(equalToConstant: 60),
+            settingsButton.widthAnchor.constraint(equalToConstant: 60)
+        ])
+        self.settingsButton = settingsButton
+        
+        // Generate Button
+        let actionButton = UIButton()
+        actionButton.backgroundColor = .tintColor
+        actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+        actionButton.setAttributedTitle(generateButtonAttributedStringForNormal, for: .normal)
+        actionButton.setAttributedTitle(generateButtonAttributedStringForHighlighted, for: .highlighted)
+        actionButton.layer.cornerRadius = StyleGuide.lightCornerRadius
+        actionButton.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(actionButton)
+        NSLayoutConstraint.activate([
+            actionButton.heightAnchor.constraint(equalToConstant: 60),
+            actionButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 4),
+            actionButton.trailingAnchor.constraint(equalTo: settingsButton.leadingAnchor, constant: -4),
+            actionButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -4)
+        ])
+        self.actionButton = actionButton
         
         // Image Scroll View
         let imageScrollView = UIScrollView()
-        imageScrollView.backgroundColor = .black
+        imageScrollView.backgroundColor = .backgroundColor
         imageScrollView.alwaysBounceVertical = true
         imageScrollView.alwaysBounceHorizontal = true
         imageScrollView.maximumZoomScale = 30
@@ -113,8 +186,8 @@ class MainViewController: UIViewController {
         NSLayoutConstraint.activate([
             imageScrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             imageScrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            imageScrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            imageScrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            imageScrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            imageScrollView.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -4)
         ])
         self.imageScrollView = imageScrollView
         
@@ -134,30 +207,13 @@ class MainViewController: UIViewController {
             mainImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1)
         ])
         self.mainImageView = mainImageView
-        
-        // Refresh Button
-        let actionButton = UIButton()
-        actionButton.backgroundColor = .white
-        actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
-        actionButton.setTitle("Action", for: .normal)
-        actionButton.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(actionButton)
-        NSLayoutConstraint.activate([
-            actionButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            actionButton.heightAnchor.constraint(equalToConstant: 60),
-            actionButton.widthAnchor.constraint(equalToConstant: 60),
-            actionButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -32)
-        ])
-        self.actionButton = actionButton
     }
     
     func createImage() -> UIImage? {
         
-//        let tileThing = SKTileMapNode(
         let noiseSource = GKPerlinNoiseSource()
-//        noiseSource.
-//        noiseSource.seed = Int32.random(in: 0...Int32.max)
-        noiseSource.seed = 1
+        noiseSource.seed = Int32.random(in: 0...Int32.max)
+//        noiseSource.seed = 1
 //        noiseSource.frequency = 3
 //        noiseSource.octaveCount = 1
 //        noiseSource.lacunarity = 4
@@ -167,7 +223,7 @@ class MainViewController: UIViewController {
 //        print("\nSize: \(noiseMap.size)")
 //        print("Origin: \(noiseMap.origin)")
 //        print("Sample Count: \(noiseMap.sampleCount)")
-        noiseMap = GKNoiseMap(noise, size: SIMD2(arrayLiteral: 1, 1), origin: SIMD2(arrayLiteral: 4, 4), sampleCount: SIMD2(arrayLiteral: 300, 300), seamless: true)
+        noiseMap = GKNoiseMap(noise, size: SIMD2(arrayLiteral: 1, 1), origin: SIMD2(arrayLiteral: 10, 10), sampleCount: SIMD2(arrayLiteral: 500, 500), seamless: true)
         
         let colorSpace       = CGColorSpaceCreateDeviceRGB()
         let width            = self.width
@@ -246,6 +302,10 @@ class MainViewController: UIViewController {
         static let magenta = RGBA32(red: 255, green: 0,   blue: 255, alpha: 255)
         static let yellow  = RGBA32(red: 255, green: 255, blue: 0,   alpha: 255)
         static let cyan    = RGBA32(red: 0,   green: 255, blue: 255, alpha: 255)
+        
+        static let water   = RGBA32(red: 0,   green: 126, blue: 255, alpha: 255)
+        static let sand    = RGBA32(red: 255, green: 238, blue: 90,  alpha: 255)
+        static let grass   = RGBA32(red: 46,  green: 212, blue: 0,   alpha: 255)
 
         static let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
 
