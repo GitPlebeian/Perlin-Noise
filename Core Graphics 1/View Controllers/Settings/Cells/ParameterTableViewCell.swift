@@ -47,10 +47,18 @@ class ParameterTableViewCell: UITableViewCell {
     // Set Selected
     override func setSelected(_ selected: Bool, animated: Bool) {
         if selected {
-            labelParentView.layer.borderColor = UIColor.white.cgColor
+            labelParentView.backgroundColor = .black
+            label.backgroundColor = .black
+            label.textColor = .white
         } else {
-            labelParentView.layer.borderColor = UIColor.black.cgColor
+            labelParentView.backgroundColor = .accentColor
+            label.backgroundColor = .accentColor
+            label.textColor = .black
         }
+    }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        // Overriden and super not called because we don't want it to be called
     }
     
     // MARK: Helpers
@@ -90,7 +98,7 @@ class ParameterTableViewCell: UITableViewCell {
         
         // Label Parent View
         let labelParentView = UIView()
-        labelParentView.backgroundColor = .backgroundColor
+        labelParentView.backgroundColor = .accentColor
         labelParentView.layer.borderColor = UIColor.black.cgColor
         labelParentView.layer.borderWidth = 2
         labelParentView.layer.cornerRadius = 2

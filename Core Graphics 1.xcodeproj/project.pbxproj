@@ -11,6 +11,7 @@
 		860B178423F3A4E500A5FA2D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860B178323F3A4E500A5FA2D /* MainViewController.swift */; };
 		860B178923F3A4E500A5FA2D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 860B178823F3A4E500A5FA2D /* Assets.xcassets */; };
 		860B178C23F3A4E500A5FA2D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 860B178A23F3A4E500A5FA2D /* LaunchScreen.storyboard */; };
+		863C7518240DF51300B9E089 /* GenerationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863C7517240DF51300B9E089 /* GenerationController.swift */; };
 		866A162E24095C4A00448243 /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A162D24095C4A00448243 /* MainNavigationController.swift */; };
 		866A16342409661700448243 /* ParameterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A16332409661700448243 /* ParameterTableViewCell.swift */; };
 		866A163824096B1400448243 /* 8bitOperatorPlus8-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 866A163724096B1400448243 /* 8bitOperatorPlus8-Regular.ttf */; };
@@ -23,12 +24,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		860B177C23F3A4E500A5FA2D /* Core Graphics 1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Core Graphics 1.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		860B177C23F3A4E500A5FA2D /* Pixel Gen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel Gen.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		860B177F23F3A4E500A5FA2D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		860B178323F3A4E500A5FA2D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		860B178823F3A4E500A5FA2D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		860B178B23F3A4E500A5FA2D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		860B178D23F3A4E500A5FA2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		863C7517240DF51300B9E089 /* GenerationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerationController.swift; sourceTree = "<group>"; };
 		866A162D24095C4A00448243 /* MainNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		866A16332409661700448243 /* ParameterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterTableViewCell.swift; sourceTree = "<group>"; };
 		866A163724096B1400448243 /* 8bitOperatorPlus8-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "8bitOperatorPlus8-Regular.ttf"; sourceTree = "<group>"; };
@@ -62,7 +64,7 @@
 		860B177D23F3A4E500A5FA2D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				860B177C23F3A4E500A5FA2D /* Core Graphics 1.app */,
+				860B177C23F3A4E500A5FA2D /* Pixel Gen.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				866A163F2409702400448243 /* ParameterController.swift */,
+				863C7517240DF51300B9E089 /* GenerationController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -185,7 +188,7 @@
 			);
 			name = "Core Graphics 1";
 			productName = "Core Graphics 1";
-			productReference = 860B177C23F3A4E500A5FA2D /* Core Graphics 1.app */;
+			productReference = 860B177C23F3A4E500A5FA2D /* Pixel Gen.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -249,6 +252,7 @@
 				866A16342409661700448243 /* ParameterTableViewCell.swift in Sources */,
 				860B178023F3A4E500A5FA2D /* AppDelegate.swift in Sources */,
 				866A163E2409700900448243 /* Parameter.swift in Sources */,
+				863C7518240DF51300B9E089 /* GenerationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,7 +397,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Jackson-Tubbs.Core-Graphics-1";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Pixel Gen";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -412,7 +416,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Jackson-Tubbs.Core-Graphics-1";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Pixel Gen";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

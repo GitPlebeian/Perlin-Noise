@@ -25,12 +25,39 @@ class ParameterController {
         return parameters.count
     }
     
+    // Get Water Level
+    func getWaterLevel() -> Float {
+        return parameters[0].slider1Value ?? 0
+    }
+    
+    // Get Beach Level
+    func getBeachLevel() -> Float {
+        return parameters[1].slider1Value ?? 0
+    }
+    
+    // Get Grass Level
+    func getGrassLevel() -> Float {
+        return parameters[2].slider1Value ?? 0
+    }
+    
+    // Get Map Size
+    func getMapSize() -> Int32 {
+        return Int32(parameters[3].slider1Value ?? 10)
+    }
+    
+    // Get Terrain Volatility
+    func getTerrainVolatility() -> Double {
+        return Double(parameters[4].slider1Value ?? 1)
+    }
+    
     // Reset Parameters
     func resetParameters() {
         parameters = []
-        parameters.append(Parameter(labelText: "Water Level", slider: true, sliderValue: 0, sliderMin: -1, sliderMax: 1))
-        parameters.append(Parameter(labelText: "Beach Level", slider: true, sliderValue: 0, sliderMin: -1, sliderMax: 1))
-        parameters.append(Parameter(labelText: "Grass Level", slider: true, sliderValue: 0, sliderMin: -1, sliderMax: 1))
+        parameters.append(Parameter(labelText: "Water Level",        oneSlider: true, slider1Value: -0.33, slider1Min: -1, slider1Max: 1, slider1IsFloat: true))
+        parameters.append(Parameter(labelText: "Beach Level",        oneSlider: true, slider1Value: -0.15, slider1Min: -1, slider1Max: 1, slider1IsFloat: true))
+        parameters.append(Parameter(labelText: "Grass Level",        oneSlider: true, slider1Value: 1,     slider1Min: -1, slider1Max: 1, slider1IsFloat: true))
+        parameters.append(Parameter(labelText: "Map Size",           oneSlider: true, slider1Value: 130,   slider1Min: 10, slider1Max: 250, slider1IsFloat: false))
+        parameters.append(Parameter(labelText: "Terrain Volatility", oneSlider: true, slider1Value: 8,     slider1Min: 1, slider1Max: 40, slider1IsFloat: true))
         saveParameters()
     }
     
@@ -44,7 +71,7 @@ class ParameterController {
     
     // MARK: Persistence
     
-    private func saveParameters() {
+    func saveParameters() {
         let jsonEncoder = JSONEncoder()
         
         do {
