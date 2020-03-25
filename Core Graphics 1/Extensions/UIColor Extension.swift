@@ -14,4 +14,5 @@ extension UIColor {
     static let accentColor         : UIColor = UIColor(displayP3Red: 255/255, green: 201/255, blue: 117/255, alpha: 1) // ffc975
     static let tintColor           : UIColor = UIColor(displayP3Red: 0/255,   green: 104/255, blue: 255/255, alpha: 1)
     static let whiteTextHighlighted: UIColor = UIColor(displayP3Red: 170/255, green: 170/255, blue: 170/255, alpha: 1)
+    static let blackTextHighlighted: UIColor = UIColor(displayP3Red: 60/255,  green: 60/255,  blue: 60/255,  alpha: 1)
 }

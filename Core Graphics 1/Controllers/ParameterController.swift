@@ -42,7 +42,7 @@ class ParameterController {
     
     // Get Map Size
     func getMapSize() -> Int32 {
-        return Int32(parameters[3].slider1Value ?? 10)
+        return Int32(parameters[3].slider1Value ?? 100)
     }
     
     // Get Terrain Volatility

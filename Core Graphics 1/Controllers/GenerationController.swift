@@ -6,9 +6,9 @@
 //  Copyright © 2020 Jackson Tubbs. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import GameKit
+import Photos
 
 class GenerationController {
     
@@ -17,16 +17,16 @@ class GenerationController {
     
     // MARK: Properties
     
-    let height: Int = 200
-    let width: Int =  200
+    let generatedImageWidth: Int = 2000
     
     private var currentImage: UIImage?
     
     // Noise
     var noiseMap: GKNoiseMap!
     
-    // MARK: Private Functions
+    // MARK: Private Functionsd
     
+    // Get Color For Float
     func getColorForFloat(number: Float) -> RGBA32 {
         if number <= ParameterController.shared.getWaterLevel() {
             return .water
@@ -35,30 +35,23 @@ class GenerationController {
         } else if number <= ParameterController.shared.getGrassLevel() {
             return .grass
         } else {
-            return .black
+            return .white
         }
     }
     
-    // MARK: Public Functions
-    func generateImage(completion: @escaping (UIImage?) -> Void) {
-        
+    // Generate Noise Map
+    private func generateNoiseMap() {
         let noiseSource = GKPerlinNoiseSource()
         noiseSource.seed = Int32.random(in: 0...Int32.max)
-        //        noiseSource.seed = 1
-        //        noiseSource.frequency = 3
-        //        noiseSource.octaveCount = 1
-        //        noiseSource.lacunarity = 4
         let noise = GKNoise(noiseSource)
-        //        noise.applyTurbulence(frequency: 1000, power: 10000, roughness: 2, seed: 8)
-        noiseMap = GKNoiseMap(noise)
-        //        print("\nSize: \(noiseMap.size)")
-        //        print("Origin: \(noiseMap.origin)")
-        //        print("Sample Count: \(noiseMap.sampleCount)")
         noiseMap = GKNoiseMap(noise, size: SIMD2(arrayLiteral: 1, 1), origin: SIMD2(arrayLiteral: ParameterController.shared.getTerrainVolatility(), ParameterController.shared.getTerrainVolatility()), sampleCount: SIMD2(arrayLiteral: ParameterController.shared.getMapSize(), ParameterController.shared.getMapSize()), seamless: true)
-        
+    }
+    
+    // Generate Image
+    private func generateImage(imageScale: Int, completion: @escaping (UIImage?) -> Void) {
         let colorSpace       = CGColorSpaceCreateDeviceRGB()
-        let width            = Int(ParameterController.shared.getMapSize())
-        let height           = Int(ParameterController.shared.getMapSize())
+        let width            = Int(ParameterController.shared.getMapSize()) * imageScale
+        let height           = Int(ParameterController.shared.getMapSize()) * imageScale
         let bytesPerPixel    = 4
         let bitsPerComponent = 8
         let bytesPerRow      = bytesPerPixel * width
@@ -81,11 +74,8 @@ class GenerationController {
         for row in 0 ..< Int(height) {
             for column in 0 ..< Int(width) {
                 let offset = row * width + column
-                //                pixelBuffer[offset] = getColorForXY(x: column, y: row)
-                let pointCordinated: SIMD2<Int32> = SIMD2(arrayLiteral: Int32(column), Int32(row))
+                let pointCordinated: SIMD2<Int32> = SIMD2(arrayLiteral: Int32(column / imageScale), Int32(row / imageScale))
                 pixelBuffer[offset] = getColorForFloat(number: noiseMap.value(at: pointCordinated))
-                //                map[row].append(noiseMap.value(at: pointCordinated))
-                //                print("\(map[row])")
             }
         }
         context.interpolationQuality = .none
@@ -93,7 +83,9 @@ class GenerationController {
         
         let outputImage = UIImage(cgImage: outputCGImage, scale: 1, orientation: UIImage.Orientation.up)
         
-        self.currentImage = outputImage
+        if imageScale == 1 {
+            self.currentImage = outputImage
+        }
         completion(outputImage)
     }
     
@@ -128,12 +120,62 @@ class GenerationController {
         static let water   = RGBA32(red: 0,   green: 148, blue: 255, alpha: 255)
         static let sand    = RGBA32(red: 255, green: 238, blue: 90,  alpha: 255)
         static let grass   = RGBA32(red: 40,  green: 255, blue: 60,  alpha: 255)
-        static let black   = RGBA32(red: 0,   green: 0,   blue: 0,   alpha: 255)
+        static let white   = RGBA32(red: 255, green: 255, blue: 255, alpha: 255)
         
         static let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
         
         static func ==(lhs: RGBA32, rhs: RGBA32) -> Bool {
             return lhs.color == rhs.color
+        }
+    }
+    
+    // MARK: Public Functions
+    
+    // Generate New Terrain
+    func generateNewTerrain(completion: @escaping (UIImage?) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.generateNoiseMap()
+            self.generateImage(imageScale: 1, completion: { (image) in
+                completion(image)
+            })
+        }
+    }
+    
+    // Save Image
+    func saveImage(completion: @escaping (Bool) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            guard let originalImageWidth = self.currentImage?.cgImage?.width else {
+                completion(false)
+                return
+            }
+            var currentWidth = originalImageWidth
+            var multiplier = 1
+            while currentWidth < self.generatedImageWidth {
+                currentWidth = multiplier * originalImageWidth
+                multiplier += 1
+            }
+            self.generateImage(imageScale: multiplier, completion: { (image) in
+                PHPhotoLibrary.shared().performChanges({
+                    guard let image = image else {
+                        completion(false)
+                        return
+                    }
+                    let creationRequest = PHAssetCreationRequest.forAsset()
+                    guard let imageData = image.pngData() else {
+                        print("Unable to create image data")
+                        completion(false)
+                        return
+                    }
+                    creationRequest.addResource(with: .photo, data: imageData, options: nil)
+                }) { (success, error) in
+                    if let error = error {
+                        print("Error Saving: \(error.localizedDescription)")
+                        completion(false)
+                        return
+                    }
+                    completion(true)
+                }
+            })
         }
     }
 }

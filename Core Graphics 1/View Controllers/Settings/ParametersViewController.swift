@@ -11,6 +11,7 @@ import UIKit
 class ParametersViewController: UIViewController {
 
     // MARK: Properties
+    var selectionFeedback: UISelectionFeedbackGenerator = UISelectionFeedbackGenerator()
     var editingParameter: Parameter?
     
     // MARK: Views
@@ -320,6 +321,7 @@ extension ParametersViewController: UITableViewDelegate, UITableViewDataSource {
     
     // Did Select
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectionFeedback.selectionChanged()
         if let parameter = ParameterController.shared.getParameterForIndex(index: indexPath.row) {
             editingParameter = parameter
             updateEditor()
