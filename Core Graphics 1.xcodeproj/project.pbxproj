@@ -18,6 +18,9 @@
 		866A163E2409700900448243 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A163D2409700900448243 /* Parameter.swift */; };
 		866A16402409702400448243 /* ParameterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A163F2409702400448243 /* ParameterController.swift */; };
 		8698456024020106003E4D8E /* ParametersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8698455F24020106003E4D8E /* ParametersViewController.swift */; };
+		86B70370242C1BC000E3C8FD /* TutorialController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B7036F242C1BC000E3C8FD /* TutorialController.swift */; };
+		86B70372242C1F3800E3C8FD /* Tutorial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B70371242C1F3800E3C8FD /* Tutorial.swift */; };
+		86B70375242C22F100E3C8FD /* OnboardingTutorialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B70374242C22F100E3C8FD /* OnboardingTutorialViewController.swift */; };
 		86E595B42404B9AD00231D53 /* 8BitBoldFont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86E595B32404B9AD00231D53 /* 8BitBoldFont.ttf */; };
 		86E595B72404BCC700231D53 /* StyleGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E595B62404BCC700231D53 /* StyleGuide.swift */; };
 		86E595BB2404BE5C00231D53 /* UIColor Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E595BA2404BE5C00231D53 /* UIColor Extension.swift */; };
@@ -37,6 +40,9 @@
 		866A163D2409700900448243 /* Parameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameter.swift; sourceTree = "<group>"; };
 		866A163F2409702400448243 /* ParameterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterController.swift; sourceTree = "<group>"; };
 		8698455F24020106003E4D8E /* ParametersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParametersViewController.swift; sourceTree = "<group>"; };
+		86B7036F242C1BC000E3C8FD /* TutorialController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialController.swift; sourceTree = "<group>"; };
+		86B70371242C1F3800E3C8FD /* Tutorial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tutorial.swift; sourceTree = "<group>"; };
+		86B70374242C22F100E3C8FD /* OnboardingTutorialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTutorialViewController.swift; sourceTree = "<group>"; };
 		86E595B32404B9AD00231D53 /* 8BitBoldFont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 8BitBoldFont.ttf; sourceTree = "<group>"; };
 		86E595B62404BCC700231D53 /* StyleGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleGuide.swift; sourceTree = "<group>"; };
 		86E595BA2404BE5C00231D53 /* UIColor Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor Extension.swift"; sourceTree = "<group>"; };
@@ -86,6 +92,7 @@
 		8620D18223F647C4006DFC52 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				86B70373242C22CC00E3C8FD /* Tutorials */,
 				866A162D24095C4A00448243 /* MainNavigationController.swift */,
 				860B178323F3A4E500A5FA2D /* MainViewController.swift */,
 				866A1631240965F500448243 /* Settings */,
@@ -134,6 +141,7 @@
 			children = (
 				866A163F2409702400448243 /* ParameterController.swift */,
 				863C7517240DF51300B9E089 /* GenerationController.swift */,
+				86B7036F242C1BC000E3C8FD /* TutorialController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -142,8 +150,17 @@
 			isa = PBXGroup;
 			children = (
 				866A163D2409700900448243 /* Parameter.swift */,
+				86B70371242C1F3800E3C8FD /* Tutorial.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		86B70373242C22CC00E3C8FD /* Tutorials */ = {
+			isa = PBXGroup;
+			children = (
+				86B70374242C22F100E3C8FD /* OnboardingTutorialViewController.swift */,
+			);
+			path = Tutorials;
 			sourceTree = "<group>";
 		};
 		86E595B22404B99000231D53 /* Custom Fonts */ = {
@@ -244,12 +261,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				866A162E24095C4A00448243 /* MainNavigationController.swift in Sources */,
+				86B70372242C1F3800E3C8FD /* Tutorial.swift in Sources */,
 				860B178423F3A4E500A5FA2D /* MainViewController.swift in Sources */,
 				8698456024020106003E4D8E /* ParametersViewController.swift in Sources */,
 				866A16402409702400448243 /* ParameterController.swift in Sources */,
 				86E595BB2404BE5C00231D53 /* UIColor Extension.swift in Sources */,
+				86B70375242C22F100E3C8FD /* OnboardingTutorialViewController.swift in Sources */,
 				86E595B72404BCC700231D53 /* StyleGuide.swift in Sources */,
 				866A16342409661700448243 /* ParameterTableViewCell.swift in Sources */,
+				86B70370242C1BC000E3C8FD /* TutorialController.swift in Sources */,
 				860B178023F3A4E500A5FA2D /* AppDelegate.swift in Sources */,
 				866A163E2409700900448243 /* Parameter.swift in Sources */,
 				863C7518240DF51300B9E089 /* GenerationController.swift in Sources */,

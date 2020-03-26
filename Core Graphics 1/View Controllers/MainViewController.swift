@@ -32,7 +32,7 @@ class MainViewController: UIViewController {
     var generateButtonAttributedStringForNormal:      NSAttributedString!
     var generateButtonAttributedStringForHighlighted: NSAttributedString!
     
-    // MARK: Object Lifecycle
+    // MARK: Init
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -60,6 +60,16 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    // View Did Appear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if TutorialController.shared.didDoTutorial(tutorial: .onboarding) == false {
+            present(OnboardingTutorialViewController(), animated: true) {
+//                TutorialController.shared.completedTutorial(tutorial: .onboarding)
+            }
+        }
     }
     
     // MARK: Other Overrides

@@ -66,6 +66,13 @@ class ParametersViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if TutorialController.shared.didDoTutorial(tutorial: .parameters) {
+            
+        }
+    }
+    
     // MARK: Other Overrides
     
     // Status Bar
