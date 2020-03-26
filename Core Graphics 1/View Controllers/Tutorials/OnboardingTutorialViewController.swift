@@ -18,8 +18,12 @@ class OnboardingTutorialViewController: UIViewController {
     // MARK: Views
     
     var parentViews: [UIView] = []
+    var pageIndicatorDots: [UIView] = []
     
     // MARK: Style Guide
+    
+    let pageIndicatorDotHeight: CGFloat = 16
+    let pageIndicatorDotSpacing: CGFloat = 0
 
     // MARK: Init
     
@@ -53,6 +57,39 @@ class OnboardingTutorialViewController: UIViewController {
     private func setupViews() {
         self.view.backgroundColor = .backgroundColor
         
+        let pageIndicatorParentView = UIView()
+        pageIndicatorParentView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(pageIndicatorParentView)
+        NSLayoutConstraint.activate([
+            pageIndicatorParentView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            pageIndicatorParentView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            pageIndicatorParentView.heightAnchor.constraint(equalToConstant: pageIndicatorDotHeight)
+        ])
+        
+        for page in 0..<numberOfPages {
+            let pageDot = UIView()
+            pageDot.backgroundColor = .accentColor
+            pageDot.layer.cornerRadius = pageIndicatorDotHeight / 2
+            pageDot.translatesAutoresizingMaskIntoConstraints = false
+            pageIndicatorParentView.addSubview(pageDot)
+            if page == 0 {
+                pageDot.leadingAnchor.constraint(equalTo: pageIndicatorParentView.leadingAnchor).isActive = true
+            } else {
+                pageDot.leadingAnchor.constraint(equalTo: pageIndicatorDots[page - 1].trailingAnchor, constant: pageIndicatorDotSpacing).isActive = true
+                if page == numberOfPages - 1 {
+                    pageDot.trailingAnchor.constraint(equalTo: pageIndicatorParentView.trailingAnchor).isActive = true
+                }
+            }
+            NSLayoutConstraint.activate([
+                pageDot.heightAnchor.constraint(equalTo: pageIndicatorParentView.heightAnchor),
+                pageDot.widthAnchor.constraint(equalTo: pageIndicatorParentView.heightAnchor)
+            ])
+            if page != 0 {
+                pageDot.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            }
+            pageIndicatorDots.append(pageDot)
+        }
+        
         let scrollView = UIScrollView()
         scrollView.delegate = self
         scrollView.decelerationRate = .fast
@@ -60,16 +97,16 @@ class OnboardingTutorialViewController: UIViewController {
         scrollView.alwaysBounceVertical = false
         scrollView.backgroundColor = .blue
         scrollView.showsVerticalScrollIndicator = false
-        scrollView.showsHorizontalScrollIndicator = true
+        scrollView.showsHorizontalScrollIndicator = false
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            scrollView.bottomAnchor.constraint(equalTo: pageIndicatorParentView.topAnchor, constant: -8)
         ])
-        
+
         for page in 0..<numberOfPages {
             let parentView = UIView()
             parentView.backgroundColor = .backgroundColor
@@ -91,7 +128,7 @@ class OnboardingTutorialViewController: UIViewController {
             ])
             parentViews.append(parentView)
             pageOriginPoints.append(CGFloat(page) * self.view.frame.width + self.view.frame.width / 2)
-            
+
             let dot = UIView()
             dot.backgroundColor = .black
             dot.translatesAutoresizingMaskIntoConstraints = false
@@ -108,12 +145,25 @@ class OnboardingTutorialViewController: UIViewController {
 
 extension OnboardingTutorialViewController: UIScrollViewDelegate {
     
-    // Will set the target Content Offset to be equal to a cards origin position
+    // Did Scroll
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        for (index, originPoint) in pageOriginPoints.enumerated() {
+            var multiplier = (((scrollView.contentOffset.x + self.view.frame.width / 2) - originPoint) / self.view.frame.width)
+            if multiplier < 0 {
+                multiplier *= -1
+            }
+            if multiplier > 0.5 {
+                pageIndicatorDots[index].transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+            } else {
+                pageIndicatorDots[index].transform = CGAffineTransform(scaleX: 1 - multiplier, y: 1 - multiplier)
+            }
+        }
+    }
+    
+    // Paging Feature
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         var closestPoint: CGFloat = CGFloat.infinity
-        print("\(targetContentOffset.pointee)")
         for index in 0..<pageOriginPoints.count {
-            print("Page Origin POints: \(pageOriginPoints)")
             var distanceToOrigin = targetContentOffset.pointee.x + self.view.bounds.width / 2 - pageOriginPoints[index]
             if distanceToOrigin < 0 {
                 distanceToOrigin *= -1
