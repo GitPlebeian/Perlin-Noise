@@ -23,6 +23,8 @@ class ParameterTableViewCell: UITableViewCell {
     weak var paddingView:     UIView!
     weak var labelParentView: UIView!
     weak var label:           UILabel!
+    weak var valueParentView: UIView!
+    weak var valueLabel: UILabel!
     
     // MARK: Style GUide
     
@@ -47,10 +49,20 @@ class ParameterTableViewCell: UITableViewCell {
     // Set Selected
     override func setSelected(_ selected: Bool, animated: Bool) {
         if selected {
+            valueParentView.isHidden = false
+            valueLabel.text = "Bacon"
+            if let value = parameter.slider1Value, let isFloat = parameter.slider1IsFloat {
+                if isFloat {
+                    valueLabel.text = "\(floor(value * 100) / 100)"
+                } else {
+                    valueLabel.text = "\(Int(floor(value)))"
+                }
+            }
             labelParentView.backgroundColor = .black
             label.backgroundColor = .black
             label.textColor = .white
         } else {
+             valueParentView.isHidden = true
             labelParentView.backgroundColor = .accentColor
             label.backgroundColor = .accentColor
             label.textColor = .black
@@ -123,5 +135,34 @@ class ParameterTableViewCell: UITableViewCell {
             label.bottomAnchor.constraint(equalTo: labelParentView.bottomAnchor, constant: -8)
         ])
         self.label = label
+        
+        // Value Parent View
+        let valueParentView = UIView()
+        valueParentView.isHidden = true
+        valueParentView.backgroundColor = .black
+        valueParentView.layer.borderWidth = 2
+        valueParentView.layer.borderColor = UIColor.black.cgColor
+        valueParentView.layer.cornerRadius = 2
+        valueParentView.translatesAutoresizingMaskIntoConstraints = false
+        paddingView.addSubview(valueParentView)
+        NSLayoutConstraint.activate([
+            valueParentView.leadingAnchor.constraint(equalTo: labelParentView.trailingAnchor, constant: 4),
+            valueParentView.centerYAnchor.constraint(equalTo: paddingView.centerYAnchor)
+        ])
+        self.valueParentView = valueParentView
+        
+        // Value Label
+        let valueLabel = UILabel()
+        valueLabel.font = labelFont
+        valueLabel.textColor = .white
+        valueLabel.translatesAutoresizingMaskIntoConstraints = false
+        valueParentView.addSubview(valueLabel)
+        NSLayoutConstraint.activate([
+            valueLabel.leadingAnchor.constraint(equalTo: valueParentView.leadingAnchor, constant: 4),
+            valueLabel.trailingAnchor.constraint(equalTo: valueParentView.trailingAnchor, constant: -4),
+            valueLabel.topAnchor.constraint(equalTo: valueParentView.topAnchor, constant: 8),
+            valueLabel.bottomAnchor.constraint(equalTo: valueParentView.bottomAnchor, constant: -8)
+        ])
+        self.valueLabel = valueLabel
     }
 }

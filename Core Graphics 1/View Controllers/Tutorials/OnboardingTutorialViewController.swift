@@ -109,7 +109,7 @@ class OnboardingTutorialViewController: UIViewController {
 
         for page in 0..<numberOfPages {
             let parentView = UIView()
-            parentView.backgroundColor = .backgroundColor
+            parentView.backgroundColor = .accentColor
             parentView.translatesAutoresizingMaskIntoConstraints = false
             scrollView.addSubview(parentView)
             if page == 0 {

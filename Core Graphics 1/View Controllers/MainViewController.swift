@@ -19,6 +19,9 @@ class MainViewController: UIViewController {
     
     weak var imageScrollView: UIScrollView!
     weak var mainImageView:   UIImageView!
+    weak var parametersLabel: UILabel!
+    weak var parametersParentView: UIView!
+    weak var parametersTableView: UITableView!
     
     weak var actionButton:    UIButton!
     weak var settingsButton:  UIButton!
@@ -65,11 +68,11 @@ class MainViewController: UIViewController {
     // View Did Appear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if TutorialController.shared.didDoTutorial(tutorial: .onboarding) == false {
-            present(OnboardingTutorialViewController(), animated: true) {
-//                TutorialController.shared.completedTutorial(tutorial: .onboarding)
-            }
-        }
+//        if TutorialController.shared.didDoTutorial(tutorial: .onboarding) == false {
+//            present(OnboardingTutorialViewController(), animated: true) {
+////                TutorialController.shared.completedTutorial(tutorial: .onboarding)
+//            }
+//        }
     }
     
     // MARK: Other Overrides
@@ -321,7 +324,7 @@ class MainViewController: UIViewController {
             imageScrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             imageScrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             imageScrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            imageScrollView.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -4)
+            imageScrollView.heightAnchor.constraint(equalTo: imageScrollView.widthAnchor)
         ])
         self.imageScrollView = imageScrollView
         
@@ -341,12 +344,85 @@ class MainViewController: UIViewController {
             mainImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1)
         ])
         self.mainImageView = mainImageView
+        
+        // Parameters Label
+        let parametersLabel = UILabel()
+        parametersLabel.font = UIFont(name: StyleGuide.boldPixelFontName, size: StyleGuide.mediumHeadingFontSize)
+        parametersLabel.text = "Parameters"
+        parametersLabel.textColor = .black
+        parametersLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(parametersLabel)
+        NSLayoutConstraint.activate([
+            parametersLabel.topAnchor.constraint(equalTo: imageScrollView.bottomAnchor, constant: 8),
+            parametersLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 4)
+        ])
+        self.parametersLabel = parametersLabel
+        
+        // Parameters Parent View
+        let parametersParentView = UIView()
+        parametersParentView.backgroundColor = .backgroundColor
+        parametersParentView.layer.borderWidth = 2
+        parametersParentView.layer.borderColor = UIColor.black.cgColor
+        parametersParentView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(parametersParentView)
+        NSLayoutConstraint.activate([
+            parametersParentView.topAnchor.constraint(equalTo: parametersLabel.bottomAnchor, constant: 8),
+            parametersParentView.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -4),
+            parametersParentView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 4),
+            parametersParentView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -4)
+        ])
+        self.parametersParentView = parametersParentView
+        
+        // Parameters Table View
+        let parametersTableView = UITableView()
+        parametersTableView.backgroundColor = .backgroundColor
+        parametersTableView.register(ParameterTableViewCell.self, forCellReuseIdentifier: "parameterCell")
+        parametersTableView.showsHorizontalScrollIndicator = false
+        parametersTableView.showsVerticalScrollIndicator = false
+        parametersTableView.delegate = self
+        parametersTableView.dataSource = self
+        parametersTableView.allowsSelection = true
+        parametersTableView.allowsMultipleSelection = false
+        parametersTableView.separatorStyle = .none
+        parametersTableView.translatesAutoresizingMaskIntoConstraints = false
+        parametersParentView.addSubview(parametersTableView)
+        NSLayoutConstraint.activate([
+            parametersTableView.topAnchor.constraint(equalTo: parametersParentView.topAnchor),
+            parametersTableView.leadingAnchor.constraint(equalTo: parametersParentView.leadingAnchor),
+            parametersTableView.trailingAnchor.constraint(equalTo: parametersParentView.trailingAnchor),
+            parametersTableView.bottomAnchor.constraint(equalTo: parametersParentView.bottomAnchor)
+        ])
+        self.parametersTableView = parametersTableView
     }
 }
 
 extension MainViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         self.mainImageView
+    }
+}
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    // Num Rows In Section
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return ParameterController.shared.getParameterCount()
+    }
+    
+    // Cell for row at
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = parametersTableView.dequeueReusableCell(withIdentifier: "parameterCell", for: indexPath) as? ParameterTableViewCell else {return UITableViewCell()}
+        
+        if let parameter = ParameterController.shared.getParameterForIndex(index: indexPath.row) {
+            cell.parameter = parameter
+        }
+        
+        return cell
+    }
+    
+    // Did Select
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectionFeedback.selectionChanged()
     }
 }
 

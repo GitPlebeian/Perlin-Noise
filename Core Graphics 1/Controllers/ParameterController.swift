@@ -57,7 +57,7 @@ class ParameterController {
         parameters.append(Parameter(labelText: "Beach Level",        oneSlider: true, slider1Value: -0.15, slider1Min: -1, slider1Max: 1, slider1IsFloat: true))
         parameters.append(Parameter(labelText: "Grass Level",        oneSlider: true, slider1Value: 1,     slider1Min: -1, slider1Max: 1, slider1IsFloat: true))
         parameters.append(Parameter(labelText: "Map Size",           oneSlider: true, slider1Value: 130,   slider1Min: 10, slider1Max: 250, slider1IsFloat: false))
-        parameters.append(Parameter(labelText: "Terrain Volatility", oneSlider: true, slider1Value: 8,     slider1Min: 1, slider1Max: 40, slider1IsFloat: true))
+        parameters.append(Parameter(labelText: "Terrain Volatility", oneSlider: true, slider1Value: 8,     slider1Min: 1, slider1Max: 20, slider1IsFloat: true))
         saveParameters()
     }
     

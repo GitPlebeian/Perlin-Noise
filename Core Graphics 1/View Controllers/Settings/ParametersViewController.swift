@@ -58,6 +58,7 @@ class ParametersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        updateEditor()
     }
     
     // View Will Appear
