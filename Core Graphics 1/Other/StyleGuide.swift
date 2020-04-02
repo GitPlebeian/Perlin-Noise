@@ -12,6 +12,7 @@ struct StyleGuide {
     
     static let boldPixelFontName:      String  = "8bitOperatorPlus8-Bold"
     static let regularPixelFontName:   String  = "8-bitOperatorPlus8-Regular"
+    static let nonPixelBold:           String  = "SFProRounded-Bold"
     static let buttonPixelFontSize:    CGFloat = 20
     static let lightCornerRadius:      CGFloat = 2
     static let readableMediumFontSize: CGFloat = 20

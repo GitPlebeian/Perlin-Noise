@@ -68,11 +68,11 @@ class MainViewController: UIViewController {
     // View Did Appear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        if TutorialController.shared.didDoTutorial(tutorial: .onboarding) == false {
-//            present(OnboardingTutorialViewController(), animated: true) {
-////                TutorialController.shared.completedTutorial(tutorial: .onboarding)
-//            }
-//        }
+        if TutorialController.shared.didDoTutorial(tutorial: .onboarding) == false {
+            present(OnboardingTutorialViewController(), animated: true) {
+                TutorialController.shared.completedTutorial(tutorial: .onboarding)
+            }
+        }
     }
     
     // MARK: Other Overrides
@@ -220,9 +220,9 @@ class MainViewController: UIViewController {
     private func setupViews() {
         setStyleGuideVariables()
         
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        
         self.view.backgroundColor = .backgroundColor
+        
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         // Settings Button
         let settingsButton = UIButton()
@@ -429,13 +429,13 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainViewController {
     
     private func saveImage() {
-        saveImageButton.isEnabled = false
-        actionButton.isEnabled = false
-        saveImageActivityIndicator.startAnimating()
         PHPhotoLibrary.requestAuthorization { (status) in
             DispatchQueue.main.async {
                 switch status {
                 case .authorized:
+                    self.saveImageButton.isEnabled = false
+                    self.actionButton.isEnabled = false
+                    self.saveImageActivityIndicator.startAnimating()
                     GenerationController.shared.saveImage { (success) in
                         DispatchQueue.main.async {
                             self.actionButton.isEnabled = true
@@ -452,6 +452,9 @@ extension MainViewController {
                     }
                 case .notDetermined:
                     if status == PHAuthorizationStatus.authorized {
+                        self.saveImageButton.isEnabled = false
+                        self.actionButton.isEnabled = false
+                        self.saveImageActivityIndicator.startAnimating()
                         GenerationController.shared.saveImage { (success) in
                             DispatchQueue.main.async {
                                 self.actionButton.isEnabled = true

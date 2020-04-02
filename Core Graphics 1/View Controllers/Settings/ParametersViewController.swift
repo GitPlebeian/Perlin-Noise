@@ -94,6 +94,12 @@ class ParametersViewController: UIViewController {
         ParameterController.shared.saveParameters()
     }
     
+    // Right Bar Button Item Tapped
+    @objc private func rightBarButtonItemTapped() {
+        selectionFeedback.selectionChanged()
+        present(OnboardingTutorialViewController(), animated: true)
+    }
+    
     // MARK: Set Style Guide Variables
     
     private func setStyleGuideVariables() {
@@ -136,6 +142,19 @@ class ParametersViewController: UIViewController {
     
     private func setupViews() {
         setStyleGuideVariables()
+        
+        let aboutButton = UIBarButtonItem(title: "About", style: .plain, target: self, action: #selector(rightBarButtonItemTapped))
+        aboutButton.setTitleTextAttributes([
+            NSAttributedString.Key.font : UIFont(name: StyleGuide.boldPixelFontName, size: 16)!,
+            NSAttributedString.Key.foregroundColor : UIColor.black,
+        ], for: .normal)
+        aboutButton.setTitleTextAttributes([
+            NSAttributedString.Key.font : UIFont(name: StyleGuide.boldPixelFontName, size: 16)!,
+            NSAttributedString.Key.foregroundColor : UIColor.blackTextHighlighted,
+        ], for: .highlighted)
+        
+        self.navigationItem.rightBarButtonItem = aboutButton
+        
         self.navigationItem.title = "Parameters"
         self.navigationController?.navigationBar.titleTextAttributes = [ NSAttributedString.Key.font: UIFont(name: StyleGuide.boldPixelFontName, size: 18.0)!,
                                                                          NSAttributedString.Key.foregroundColor: UIColor.black]

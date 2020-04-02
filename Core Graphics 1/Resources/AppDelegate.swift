@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,17 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
         ParameterController.shared.loadParameters()
         presentInitialViewController()
         return true
     }
 
     private func presentInitialViewController() {
-//        let initialViewController = MainViewController(nibName: nil, bundle: nil)
-//        self.window = UIWindow(frame: UIScreen.main.bounds)
-//        self.window?.rootViewController = initialViewController
-//        self.window?.makeKeyAndVisible()
-        
         let mainNavigationController = MainNavigationController(nibName: nil, bundle: nil)
         let mainViewController = MainViewController()
         mainNavigationController.viewControllers = [mainViewController]
