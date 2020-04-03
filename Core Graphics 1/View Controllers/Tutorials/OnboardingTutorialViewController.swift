@@ -44,6 +44,14 @@ class OnboardingTutorialViewController: UIViewController {
         setupViews()
     }
     
+    // Did Appear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        for page in 0..<numberOfPages {
+            pageOriginPoints.append(CGFloat(page) * self.view.frame.width + self.view.frame.width / 2)
+        }
+    }
+    
     // MARK: Actions
     
     // Rate App Button Tapped
@@ -158,7 +166,6 @@ class OnboardingTutorialViewController: UIViewController {
                 parentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
             ])
             parentViews.append(parentView)
-            pageOriginPoints.append(CGFloat(page) * self.view.frame.width + self.view.frame.width / 2)
             
             switch page {
             case 0:
