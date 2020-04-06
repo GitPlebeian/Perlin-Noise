@@ -28,14 +28,24 @@ class GenerationController {
     
     // Get Color For Float
     func getColorForFloat(number: Float) -> RGBA32 {
-        if number <= ParameterController.shared.getWaterLevel() {
+        if number <= ParameterController.shared.getDeepWaterLevel() {
+            return .deepWater
+        } else if number <= ParameterController.shared.getWaterLevel() {
             return .water
         } else if number <= ParameterController.shared.getBeachLevel() {
             return .sand
         } else if number <= ParameterController.shared.getGrassLevel() {
             return .grass
+        } else if number <= ParameterController.shared.getForestLevel() {
+            return .forest
+        } else if number <= ParameterController.shared.getDirtLevel() {
+            return .dirt
+        } else if number <= ParameterController.shared.getMountainLevel() {
+            return .mountain
+        } else if number <= ParameterController.shared.getSnowLevel() {
+            return .snow
         } else {
-            return .white
+            return .snow
         }
     }
     
@@ -117,10 +127,14 @@ class GenerationController {
             color = (red << 24) | (green << 16) | (blue << 8) | (alpha << 0)
         }
         
-        static let water   = RGBA32(red: 0,   green: 148, blue: 255, alpha: 255)
-        static let sand    = RGBA32(red: 255, green: 238, blue: 90,  alpha: 255)
-        static let grass   = RGBA32(red: 40,  green: 255, blue: 60,  alpha: 255)
-        static let white   = RGBA32(red: 255, green: 255, blue: 255, alpha: 255)
+        static let deepWater = RGBA32(red: 22,  green: 49,  blue: 218, alpha: 255)
+        static let water     = RGBA32(red: 14,  green: 97,  blue: 255, alpha: 255)
+        static let sand      = RGBA32(red: 227, green: 237, blue: 124, alpha: 255)
+        static let grass     = RGBA32(red: 86,  green: 236, blue: 40,  alpha: 255)
+        static let forest    = RGBA32(red: 39,  green: 170, blue: 64,  alpha: 255)
+        static let dirt      = RGBA32(red: 147, green: 102, blue: 0,   alpha: 255)
+        static let mountain  = RGBA32(red: 91,  green: 72,  blue: 16,  alpha: 255)
+        static let snow      = RGBA32(red: 255, green: 255, blue: 255, alpha: 255)
         
         static let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Little.rawValue
         
