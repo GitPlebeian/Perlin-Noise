@@ -88,10 +88,14 @@ class GenerationController {
                 pixelBuffer[offset] = getColorForFloat(number: noiseMap.value(at: pointCordinated))
             }
         }
-        context.interpolationQuality = .none
-        let outputCGImage = context.makeImage()!
         
-        let outputImage = UIImage(cgImage: outputCGImage, scale: 1, orientation: UIImage.Orientation.up)
+        guard let outputCGImage = context.makeImage() else {
+            print("Unable To Make Image")
+            completion(nil)
+            return
+        }
+        
+        let outputImage = UIImage(cgImage: outputCGImage)
         
         if imageScale == 1 {
             self.currentImage = outputImage
